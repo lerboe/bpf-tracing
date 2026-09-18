@@ -1,6 +1,6 @@
 [package]
 name = "bpf-tracing"
-version = "0.0.5"
+version = "0.0.7"
 edition = "2024"
 description = "An eBPF tracing facility that integrates neatly into Rust's tracing"
 license.workspace = true
@@ -8,9 +8,10 @@ authors.workspace = true
 repository.workspace = true
 readme.workspace = true
 keywords.workspace = true
+categories.workspace = true
 
 [dependencies]
-bpf-tracing-include = { path = "../bpf-tracing-include" }
+bpf-tracing-include = { version = "0.0.7", path = "../bpf-tracing-include" }
 libbpf-rs = "0.26.2"
 tracing = "0.1.44"
 

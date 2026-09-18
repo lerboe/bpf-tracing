@@ -7,6 +7,7 @@ license = "MIT"
 authors = [
     "lbrndnr <mail@laurinbrandner.ch>",
 ]
-repository = "https://github.com/lbrndnr/bpf-tracing-rs"
+repository = "https://github.com/lerboe/bpf-tracing-rs"
 readme = "README.md"
 keywords = ["ebpf", "bpf", "libbpf", "tracing", "logging"]
+categories = ["network-programming"]
