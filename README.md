@@ -13,6 +13,9 @@
 
 This is a tracing facility for eBPF that produces rich, event-based diagnostic information. It efficiently copies tracing events into user space using a ring buffer, and emits them conveniently using the [tracing](https://crates.io/crates/tracing) facility. 
 
+> [!WARNING]
+> This crate has been integrated into [xbpf](https://crates.io/crates/xbpf). Please use xbpf for continued support with new features and bug fixes.
+
 ## Usage
 
 You can run the example using `RUST_LOG=trace cargo r --bin example` 
