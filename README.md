@@ -14,7 +14,7 @@
 This is a tracing facility for eBPF that produces rich, event-based diagnostic information. It efficiently copies tracing events into user space using a ring buffer, and emits them conveniently using the [tracing](https://crates.io/crates/tracing) facility. 
 
 > [!WARNING]
-> This crate has been integrated into [xbpf](https://crates.io/crates/xbpf). Please use xbpf for continued support with new features and bug fixes.
+> This crate has been integrated into [xbpf](https://crates.io/crates/xbpf), and now only serves as a shim layer for backwards compatibility. I suggest to use xbpf for continued support with new features and bug fixes.
 
 ## Usage
 
@@ -23,16 +23,16 @@ You can run the example using `RUST_LOG=trace cargo r --bin example`
 To use `bpf-tracing`, add the following to your `Cargo.toml`:
 ```toml
 [dependencies]
-bpf-tracing = "0.0.4"
+bpf-tracing = "0.0.8"
 
 [build-dependencies]
-bpf-tracing-include = "0.0.4"
+bpf-tracing-include = "0.0.8"
 ```
 
 Next, in your `build.rs` script, provide the `bpf_tracing_include` arguments to clang as follows:
 ```rust
 let mut args = vec![OsString::from("-I"), OsString::from("../include")];
-args.extend(bpf_tracing_include::clang_args_from_default_env(true).unwrap());
+args.extend(bpf_tracing_include::clang_args_from_default_env());
 
 SkeletonBuilder::new()
     .source(&src)
@@ -41,6 +41,9 @@ SkeletonBuilder::new()
     .unwrap();
 ```
 `clang_args_from_env` reads the `RUST_LOG` environment variable to compile out unneeded logging calls in the eBPF code. Note that `bpf-tracing` disables tracing at compile time, since logging is expensive in eBPF. Note that this example uses [libbpf-rs](https://github.com/libbpf/libbpf-rs), but other libraries work just as well.
+
+> [!Tip]
+> If you are using [xbpf](https://crates.io/crates/xbpf), you can use `xbpf::build()`.
 
 In your eBPF program, you can now include the [bpf_tracing.h](include/bpf_tracing.h) header and call tracing functions.
 ```c

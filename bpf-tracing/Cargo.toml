@@ -11,9 +11,4 @@ keywords.workspace = true
 categories.workspace = true
 
 [dependencies]
-bpf-tracing-include = { version = "0.0.7", path = "../bpf-tracing-include" }
-libbpf-rs = "0.26.2"
-tracing = "0.1.44"
-
-[dev-dependencies]
-tempfile = "3.27.0"
+xbpf = { version = "0.0.3", default-features = false, features = ["tracing"] }

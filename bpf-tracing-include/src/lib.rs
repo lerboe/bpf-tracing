@@ -5,7 +5,7 @@
 //! should be sufficient to compile `bpf-tracing`. You can
 //! customize the ring buffer used to copy the tracing events to
 //! user space with the following clang arguments:
-//! `BPF_TRACING_RINGBUF_SIZE`: determines the size of the ring buffer in bytes, default is 1000.
+//! `BPF_TRACING_RING_BUF_SIZE`: determines the size of the ring buffer in bytes, default is 8192.
 //! `BPF_TRACING_STR_LEN`: determines the maximum string length for tracing events, default is 128.
 //! # Example
 //!
@@ -46,8 +46,6 @@
 use std::{env, ffi::OsString, path::Path};
 use tracing::{Dispatch, Level, Metadata, level_filters::LevelFilter};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, registry::Registry};
-
-pub mod event;
 
 /// Returns true if `target` is enabled at `level` by this EnvFilter.
 fn target_enabled_at(filter: &EnvFilter, target: &'static str, level: Level) -> bool {
@@ -114,7 +112,13 @@ pub fn clang_args_from_env(env_var: &str) -> Vec<OsString> {
 
 /// Similar to [`clang_args_from_default_env`], but takes an explicit tracing [`LevelFilter`].
 pub fn clang_args(level: LevelFilter) -> Vec<OsString> {
-    let mut args = vec![OsString::from("-I"), OsString::from(include_path_root())];
+    // bpf_tracing.h includes xbpf.h, so both directories have to be searched.
+    let mut args = vec![
+        OsString::from("-I"),
+        OsString::from(include_path_root()),
+        OsString::from("-I"),
+        OsString::from(xbpf::build::include_path_root()),
+    ];
     let log_level = match level {
         LevelFilter::OFF => 0,
         LevelFilter::ERROR => 1,
